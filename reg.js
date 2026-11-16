@@ -1,5 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import fs from 'fs';
+import http from 'http';
 
 const TOKEN = '9221555974:AAHSM4Kxst-RF-ZmOPvTNykk2CPIveayc3Y';
 const ADMIN_IDS = [8310040875, 8299255756, 7214173766]; // O'z Telegram ID raqamingiz`
@@ -361,3 +362,17 @@ const userMenu = (chatId) => ({
 });
 
 console.log('🚀 Bot muvaffaqiyatli ishga tushdi va ishlamoqda...');
+
+// --- Render uchun HTTP server ---
+// Render "Web Service" ochiq port talab qiladi. Bot polling bilan ishlagani uchun
+// kichik server ochamiz. Shuningdek cron-job.org shu manzilni ping qilib,
+// bepul Render xizmati uxlab qolmasligi uchun uyg'oq tutadi.
+const PORT = process.env.PORT || 3000;
+http
+  .createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Bot ishlayapti ✅');
+  })
+  .listen(PORT, () => {
+    console.log(`🌐 HTTP server ${PORT}-portda ishga tushdi (Render uchun)`);
+  });
